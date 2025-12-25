@@ -108,7 +108,7 @@
                 </div>
             </div>
             
-            <a href="https://discord.gg/wNFJ64QrrV" target="_blank" class="btn">ENTRAR NAMORAL</a>
+            <a href="https://discord.gg/wNFJ64QrrV" target="_blank" class="btn" onclick="playClick()">ENTRAR NAMORAL</a>
         </div>
 
         <div class="grid">
@@ -120,23 +120,42 @@
 
     <section id="mc" class="page">
         <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
-        <div class="dl-row"><span>Instalador Cleiti FULL</span><a href="https://www.mediafire.com/file/kpsaysvi2qxr968/Instalador_Cleiti6966hubs_FULL.exe/file" class="btn">DOWNLOAD</a></div>
-        <div class="dl-row"><span>Site Auxiliar (TXT)</span><a href="https://www.mediafire.com/file/wnpb94ojoqlgcmg/site+1.txt/file" class="btn">DOWNLOAD</a></div>
+        <div class="dl-row"><span>Instalador Cleiti FULL</span><a href="https://www.mediafire.com/file/kpsaysvi2qxr968/Instalador_Cleiti6966hubs_FULL.exe/file" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+        <div class="dl-row"><span>Site Auxiliar (TXT)</span><a href="https://www.mediafire.com/file/wnpb94ojoqlgcmg/site+1.txt/file" class="btn" onclick="playClick()">DOWNLOAD</a></div>
     </section>
 
     <section id="piano" class="page">
         <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
-        <div class="dl-row"><span>AutoHotKey</span><a href="https://www.autohotkey.com/" class="btn">SITE</a></div>
-        <div class="dl-row"><span>Piano Script .ahk</span><a href="https://www.mediafire.com/file/03rgl6jpok5irvw/Piano_AUTO_PLAY.ahk/file" class="btn">DOWNLOAD</a></div>
+        <div class="dl-row"><span>AutoHotKey</span><a href="https://www.autohotkey.com/" class="btn" onclick="playClick()">SITE</a></div>
+        <div class="dl-row"><span>Piano Script .ahk</span><a href="https://www.mediafire.com/file/03rgl6jpok5irvw/Piano_AUTO_PLAY.ahk/file" class="btn" onclick="playClick()">DOWNLOAD</a></div>
     </section>
 
     <section id="boot" class="page">
         <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
-        <div class="dl-row"><span>EasyBCD v2.4</span><a href="https://easybcd.org/Download-EasyBCD" class="btn">DOWNLOAD</a></div>
-        <div class="dl-row"><span>Wimlib 1.14.4</span><a href="https://wimlib.net/downloads/wimlib-1.14.4-windows-x86_64-bin.zip" class="btn">DOWNLOAD</a></div>
+        <div class="dl-row"><span>EasyBCD v2.4</span><a href="https://easybcd.org/Download-EasyBCD" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+        <div class="dl-row"><span>Wimlib 1.14.4</span><a href="https://wimlib.net/downloads/wimlib-1.14.4-windows-x86_64-bin.zip" class="btn" onclick="playClick()">DOWNLOAD</a></div>
     </section>
 
+    <audio id="start-sound" src="https://github.com/CLEITI6966/SITE-FEI/raw/refs/heads/main/amoung-us.mp3"></audio>
+    <audio id="click-sound" src="https://github.com/CLEITI6966/SITE-FEI/raw/refs/heads/main/gemi2-01.mp3"></audio>
+
     <script>
+        // Sons
+        const startAudio = document.getElementById('start-sound');
+        const clickAudio = document.getElementById('click-sound');
+
+        // Tenta tocar o som de início ao primeiro clique do usuário (exigência dos navegadores modernos)
+        window.addEventListener('click', () => {
+            if (startAudio.paused) {
+                startAudio.play().catch(e => console.log("Som inicial aguardando interação..."));
+            }
+        }, { once: true });
+
+        function playClick() {
+            clickAudio.currentTime = 0;
+            clickAudio.play();
+        }
+
         // Segue o mouse para o efeito de brilho no fundo
         document.addEventListener('mousemove', e => {
             const glow = document.getElementById('glow');
@@ -145,6 +164,7 @@
         });
 
         function go(id) {
+            playClick(); // Toca o som ao mudar de página
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
@@ -152,7 +172,6 @@
 
         async function fetchRealData() {
             try {
-                // Usando a API de Invite que dá o total real de membros do servidor
                 const res = await fetch('https://discord.com/api/v9/invites/wNFJ64QrrV?with_counts=true');
                 const data = await res.json();
                 
@@ -167,7 +186,7 @@
         }
 
         fetchRealData();
-        setInterval(fetchRealData, 20000); // Atualiza a cada 20 seg
+        setInterval(fetchRealData, 20000);
     </script>
 </body>
 </html>
