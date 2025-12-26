@@ -19,20 +19,36 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: var(--bg); color: white; font-family: 'Inter', sans-serif; overflow-x: hidden; }
 
-        /* FUNDO ANIMADO */
         .bg-glow {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), #1a1a2e 0%, #030303 50%);
             z-index: -2; transition: 0.1s;
         }
 
-        /* NAVBAR */
+        /* NAVBAR & MENU */
         nav {
             padding: 20px 5%; display: flex; justify-content: space-between; align-items: center;
             position: fixed; width: 100%; top: 0; z-index: 100; backdrop-filter: blur(15px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         .logo { font-family: 'Syncopate'; font-size: 0.6rem; letter-spacing: 5px; color: var(--primary); text-transform: uppercase; }
+        
+        .menu-icon { cursor: pointer; display: flex; flex-direction: column; gap: 5px; z-index: 1001; }
+        .menu-icon div { width: 25px; height: 3px; background: white; transition: 0.3s; }
+
+        .sidebar {
+            position: fixed; top: 0; right: -300px; width: 300px; height: 100%;
+            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px);
+            z-index: 1000; transition: 0.4s; padding: 100px 30px;
+            border-left: 1px solid var(--primary);
+        }
+        .sidebar.active { right: 0; }
+        .sidebar-link {
+            display: block; color: white; text-decoration: none; font-size: 0.8rem;
+            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 30px;
+            font-weight: 900; transition: 0.3s; cursor: pointer;
+        }
+        .sidebar-link:hover { color: var(--primary); padding-left: 10px; }
 
         /* PÁGINAS */
         .page { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 100px 5%; }
@@ -40,48 +56,32 @@
 
         @keyframes pageZoom { from { opacity: 0; transform: scale(1.1); } to { opacity: 1; transform: scale(1); } }
 
-        /* CARD DISCORD */
+        /* BYPASS WEBHOOK STYLES */
+        .input-box {
+            width: 100%; max-width: 500px; background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px; color: white;
+            font-family: 'Inter'; outline: none; border: 1px solid var(--primary);
+        }
+        .code-output {
+            width: 100%; max-width: 500px; background: #000; color: #00ff00;
+            padding: 20px; border-radius: 10px; font-family: monospace; font-size: 0.7rem;
+            overflow-x: auto; white-space: pre-wrap; margin-top: 20px; display: none;
+            border: 1px dashed #333; position: relative;
+        }
+        .copy-btn { margin-top: 10px; display: none; background: #333; font-size: 0.6rem; }
+
+        /* CARDS E GRIDS */
         .discord-card {
             background: var(--glass); border: 1px solid rgba(255,255,255,0.1);
             padding: 40px; border-radius: 30px; text-align: center; width: 100%; max-width: 420px;
             backdrop-filter: blur(20px); transition: var(--transition); margin-bottom: 40px;
-            position: relative; overflow: hidden;
         }
-        .discord-card:hover { border-color: var(--primary); transform: translateY(-10px) scale(1.02); }
-
-        .server-img { width: 100px; height: 100px; border-radius: 25px; margin-bottom: 15px; border: 2px solid var(--primary); box-shadow: 0 0 20px rgba(88,101,242,0.4); }
-
-        .status-real { display: flex; justify-content: center; gap: 30px; margin: 25px 0; }
-        .count-box { display: flex; flex-direction: column; }
-        .count-num { font-size: 1.8rem; font-weight: 900; color: #fff; }
-        .count-label { font-size: 0.6rem; text-transform: uppercase; color: var(--primary); letter-spacing: 2px; }
-
-        /* BOTÕES */
         .btn {
             background: var(--primary); color: white; padding: 14px 35px; border-radius: 12px;
             text-decoration: none; font-weight: 900; font-size: 0.8rem; transition: 0.3s;
-            display: inline-block; border: none; text-transform: uppercase;
+            display: inline-block; border: none; text-transform: uppercase; cursor: pointer;
         }
-        .btn:hover { background: #fff; color: var(--primary); transform: scale(1.1); box-shadow: 0 0 30px rgba(255,255,255,0.5); }
-
-        /* GRID */
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; width: 100%; max-width: 900px; }
-        .opt {
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08);
-            padding: 40px; border-radius: 20px; cursor: pointer; transition: var(--transition); text-align: center;
-        }
-        .opt:hover { background: var(--primary); transform: translateY(-5px); }
-        .opt h2 { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; }
-
-        /* DOWNLOADS */
-        .dl-row {
-            background: rgba(255,255,255,0.03); width: 100%; max-width: 600px; padding: 25px;
-            border-radius: 20px; margin-bottom: 15px; display: flex; justify-content: space-between;
-            align-items: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
-        }
-        .dl-row:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
-
-        .back { cursor: pointer; color: var(--primary); font-size: 0.7rem; font-weight: 900; margin-bottom: 30px; letter-spacing: 4px; }
+        .btn:hover { background: #fff; color: var(--primary); transform: scale(1.1); }
     </style>
 </head>
 <body>
@@ -90,103 +90,129 @@
 
     <nav>
         <div class="logo">CLEITI6966HUBS</div>
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div><div></div><div></div>
+        </div>
     </nav>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-link" onclick="go('home')">Início</div>
+        <div class="sidebar-link" onclick="go('webhook')">Burlar Webhook</div>
+        <div class="sidebar-link" onclick="go('mc')">Minecraft</div>
+        <div class="sidebar-link" onclick="go('piano')">Roblox</div>
+        <div class="sidebar-link" onclick="go('boot')">Dual Boot</div>
+    </div>
 
     <section id="home" class="page active">
         <div class="discord-card">
-            <img id="srv-icon" src="https://raw.githubusercontent.com/CLEITI6966/HUB/refs/heads/main/IMG_20251225_145843.png" class="server-img" alt="Server">
-            <h1 id="srv-name" style="font-size: 1.3rem; letter-spacing: 2px;">CARREGANDO...</h1>
-            
+            <h1 id="srv-name" style="font-size: 1.3rem;">CARREGANDO...</h1>
             <div class="status-real">
-                <div class="count-box">
-                    <span class="count-num" id="online-now">0</span>
-                    <span class="count-label">Online</span>
-                </div>
-                <div class="count-box">
-                    <span class="count-num" id="total-members">0</span>
-                    <span class="count-label">Membros</span>
-                </div>
+                <span id="online-now">0</span> Online | <span id="total-members">0</span> Membros
             </div>
-            
-            <a href="https://discord.gg/wNFJ64QrrV" target="_blank" class="btn" onclick="playClick()">ENTRAR NAMORAL</a>
+            <br>
+            <a href="https://discord.gg/Nm8wABP5RN" target="_blank" class="btn" onclick="playClick()">ENTRAR</a>
         </div>
+    </section>
 
-        <div class="grid">
-            <div class="opt" onclick="go('mc')"><h2>Minecraft</h2></div>
-            <div class="opt" onclick="go('piano')"><h2>Roblox</h2></div>
-            <div class="opt" onclick="go('boot')"><h2>Dual Boot</h2></div>
-        </div>
+    <section id="webhook" class="page">
+        <h2 style="letter-spacing: 5px; margin-bottom: 20px;">BURLAR WEBHOOK</h2>
+        <input type="text" id="webhook-link" class="input-box" placeholder="Cole o link do Webhook aqui...">
+        <button class="btn" onclick="generateBypass()">Gerar Código Ghost</button>
+        
+        <div id="code-output" class="code-output"></div>
+        <button id="copy-btn" class="btn copy-btn" onclick="copyCode()">COPIAR CÓDIGO</button>
     </section>
 
     <section id="mc" class="page">
-        <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
-        <div class="dl-row"><span>Instalador Cleiti FULL</span><a href="https://www.mediafire.com/file/kpsaysvi2qxr968/Instalador_Cleiti6966hubs_FULL.exe/file" class="btn" onclick="playClick()">DOWNLOAD</a></div>
-        <div class="dl-row"><span>Site Auxiliar (TXT)</span><a href="https://www.mediafire.com/file/wnpb94ojoqlgcmg/site+1.txt/file" class="btn" onclick="playClick()">DOWNLOAD</a></div>
-    </section>
-
-    <section id="piano" class="page">
-        <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
-        <div class="dl-row"><span>AutoHotKey</span><a href="https://www.autohotkey.com/" class="btn" onclick="playClick()">SITE</a></div>
-        <div class="dl-row"><span>Piano Script .ahk</span><a href="https://www.mediafire.com/file/03rgl6jpok5irvw/Piano_AUTO_PLAY.ahk/file" class="btn" onclick="playClick()">DOWNLOAD</a></div>
-    </section>
-
-    <section id="boot" class="page">
-        <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
-        <div class="dl-row"><span>EasyBCD v2.4</span><a href="https://easybcd.org/Download-EasyBCD" class="btn" onclick="playClick()">DOWNLOAD</a></div>
-        <div class="dl-row"><span>Wimlib 1.14.4</span><a href="https://wimlib.net/downloads/wimlib-1.14.4-windows-x86_64-bin.zip" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+        <div class="btn" onclick="go('home')">VOLTAR</div>
     </section>
 
     <audio id="start-sound" src="https://github.com/CLEITI6966/SITE-FEI/raw/refs/heads/main/amoung-us.mp3"></audio>
     <audio id="click-sound" src="https://github.com/CLEITI6966/SITE-FEI/raw/refs/heads/main/gemi2-01.mp3"></audio>
 
     <script>
-        // Sons
         const startAudio = document.getElementById('start-sound');
         const clickAudio = document.getElementById('click-sound');
 
-        // Tenta tocar o som de início ao primeiro clique do usuário (exigência dos navegadores modernos)
-        window.addEventListener('click', () => {
-            if (startAudio.paused) {
-                startAudio.play().catch(e => console.log("Som inicial aguardando interação..."));
-            }
-        }, { once: true });
+        function toggleMenu() {
+            document.getElementById('sidebar').classList.toggle('active');
+            playClick();
+        }
 
         function playClick() {
             clickAudio.currentTime = 0;
             clickAudio.play();
         }
 
-        // Segue o mouse para o efeito de brilho no fundo
+        function go(id) {
+            playClick();
+            document.getElementById('sidebar').classList.remove('active');
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        function generateBypass() {
+            const link = document.getElementById('webhook-link').value;
+            if(!link.includes("discord.com/api/webhooks")) {
+                alert("Link inválido!");
+                return;
+            }
+            playClick();
+            
+            const code = `-- Ghost Webhook System
+local url = "${link}"
+local req = (fluxus and fluxus.request) or (syn and syn.request) or http_request or request
+
+if req then
+    req({
+        Url = url,
+        Method = "POST",
+        Headers = {["Content-Type"] = "application/json"},
+        Body = game:GetService("HttpService"):JSONEncode({content = "BYPASS EXECUTED"})
+    })
+    print("Enviado!")
+else
+    print("Executor não suportado")
+end`;
+
+            const output = document.getElementById('code-output');
+            output.innerText = code;
+            output.style.display = 'block';
+            document.getElementById('copy-btn').style.display = 'inline-block';
+        }
+
+        function copyCode() {
+            const text = document.getElementById('code-output').innerText;
+            navigator.clipboard.writeText(text);
+            alert("Código copiado!");
+            playClick();
+        }
+
+        // Mouse Glow
         document.addEventListener('mousemove', e => {
             const glow = document.getElementById('glow');
             glow.style.setProperty('--x', e.clientX + 'px');
             glow.style.setProperty('--y', e.clientY + 'px');
         });
 
-        function go(id) {
-            playClick(); // Toca o som ao mudar de página
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo(0,0);
-        }
+        // Som ao iniciar
+        window.addEventListener('click', () => {
+            if (startAudio.paused) startAudio.play().catch(() => {});
+        }, { once: true });
 
+        // Discord API
         async function fetchRealData() {
             try {
-                const res = await fetch('https://discord.com/api/v9/invites/wNFJ64QrrV?with_counts=true');
+                const res = await fetch('https://discord.com/api/v9/invites/Nm8wABP5RN?with_counts=true');
                 const data = await res.json();
-                
                 if(data.guild) {
                     document.getElementById('srv-name').innerText = data.guild.name.toUpperCase();
                     document.getElementById('online-now').innerText = data.approximate_presence_count;
                     document.getElementById('total-members').innerText = data.approximate_member_count;
                 }
-            } catch (e) {
-                console.log("Erro ao carregar API");
-            }
+            } catch (e) {}
         }
-
         fetchRealData();
-        setInterval(fetchRealData, 20000);
     </script>
 </body>
 </html>
