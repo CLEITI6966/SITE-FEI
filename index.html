@@ -55,7 +55,7 @@
         .btn {
             background: var(--primary); color: white; padding: 14px 35px; border-radius: 12px;
             text-decoration: none; font-weight: 900; font-size: 0.8rem; transition: 0.3s;
-            display: inline-block; border: none; text-transform: uppercase;
+            display: inline-block; border: none; text-transform: uppercase; cursor: pointer;
         }
         .btn:hover { background: #fff; color: var(--primary); transform: scale(1.1); box-shadow: 0 0 30px rgba(255,255,255,0.5); }
 
@@ -66,6 +66,13 @@
         }
         .opt:hover { background: var(--primary); transform: translateY(-5px); }
         .opt h2 { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; }
+
+        .dl-row {
+            background: rgba(255,255,255,0.03); width: 100%; max-width: 600px; padding: 25px;
+            border-radius: 20px; margin-bottom: 15px; display: flex; justify-content: space-between;
+            align-items: center; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+        }
+        .dl-row:hover { background: rgba(255,255,255,0.08); border-color: var(--primary); }
 
         .back { cursor: pointer; color: var(--primary); font-size: 0.7rem; font-weight: 900; margin-bottom: 30px; letter-spacing: 4px; }
     </style>
@@ -94,7 +101,7 @@
                 </div>
             </div>
             
-            <a href="https://discord.gg/EvV2nWCwBa" target="_blank" class="btn" onclick="playClick()">ENTRAR NAMORAL</a>
+            <a href="https://discord.gg/EvV2nWCwBa" target="_blank" class="btn" onclick="playClick()">ENTRAR NO SERVIDOR</a>
         </div>
 
         <div class="grid">
@@ -104,6 +111,24 @@
         </div>
     </section>
 
+    <section id="mc" class="page">
+        <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
+        <div class="dl-row"><span>Instalador Cleiti FULL</span><a href="https://www.mediafire.com/file/kpsaysvi2qxr968/Instalador_Cleiti6966hubs_FULL.exe/file" target="_blank" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+        <div class="dl-row"><span>Site Auxiliar (TXT)</span><a href="https://www.mediafire.com/file/wnpb94ojoqlgcmg/site+1.txt/file" target="_blank" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+    </section>
+
+    <section id="piano" class="page">
+        <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
+        <div class="dl-row"><span>AutoHotKey</span><a href="https://www.autohotkey.com/" target="_blank" class="btn" onclick="playClick()">SITE</a></div>
+        <div class="dl-row"><span>Piano Script .ahk</span><a href="https://www.mediafire.com/file/03rgl6jpok5irvw/Piano_AUTO_PLAY.ahk/file" target="_blank" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+    </section>
+
+    <section id="boot" class="page">
+        <div class="back" onclick="go('home')">← VOLTAR AO INÍCIO</div>
+        <div class="dl-row"><span>EasyBCD v2.4</span><a href="https://easybcd.org/Download-EasyBCD" target="_blank" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+        <div class="dl-row"><span>Wimlib 1.14.4</span><a href="https://wimlib.net/downloads/wimlib-1.14.4-windows-x86_64-bin.zip" target="_blank" class="btn" onclick="playClick()">DOWNLOAD</a></div>
+    </section>
+
     <audio id="click-sound" src="https://github.com/CLEITI6966/SITE-FEI/raw/refs/heads/main/gemi2-01.mp3"></audio>
 
     <script>
@@ -111,35 +136,38 @@
 
         function playClick() {
             clickAudio.currentTime = 0;
-            clickAudio.play().catch(e => console.log("Erro ao tocar som: ", e));
+            clickAudio.play();
         }
 
+        // Efeito do mouse no fundo
         document.addEventListener('mousemove', e => {
             const glow = document.getElementById('glow');
             glow.style.setProperty('--x', e.clientX + 'px');
             glow.style.setProperty('--y', e.clientY + 'px');
         });
 
+        // Função para navegar entre as páginas
         function go(id) {
             playClick();
-            // Lógica para navegação entre páginas (se houver mais seções configuradas)
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(id);
-            if(target) target.classList.add('active');
+            document.getElementById(id).classList.add('active');
             window.scrollTo(0,0);
         }
 
+        // Busca dados do Discord (ID atualizado para EvV2nWCwBa)
         async function fetchRealData() {
             try {
-                // Link da API atualizado com o novo invite
                 const res = await fetch('https://discord.com/api/v9/invites/EvV2nWCwBa?with_counts=true');
                 const data = await res.json();
+                
                 if(data.guild) {
                     document.getElementById('srv-name').innerText = data.guild.name.toUpperCase();
                     document.getElementById('online-now').innerText = data.approximate_presence_count;
                     document.getElementById('total-members').innerText = data.approximate_member_count;
                 }
-            } catch (e) { console.log("Erro ao buscar dados do Discord"); }
+            } catch (e) {
+                console.log("Erro ao carregar API");
+            }
         }
 
         fetchRealData();
